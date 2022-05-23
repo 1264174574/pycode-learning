@@ -12,9 +12,11 @@ def test():
 
 # 将日志信息记录到文件
 def save_to_file():
-    logging.basicConfig(filename='F:/example.log', level=logging.DEBUG)
-    logging.debug('This message should go to the log file')
-    logging.info('So should this')
-    logging.warning('And this, too')
+    logging.basicConfig(filename='logger.log', level=logging.INFO)
+    logging.debug('debug message')
+    logging.info('info message')
+    logging.warning('warning message')
+    logging.error('error message')
+    logging.critical('critical message')
 
-test()
+save_to_file()
