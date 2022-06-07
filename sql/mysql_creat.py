@@ -15,8 +15,9 @@ conn = pymysql.connect(host=host, port=port, user=user, password=password, chars
 cursor = conn.cursor()
 # sql = "CREATE DATABASE IF NOT EXISTS chng_project"  # 创建数据库
 # sql = "DROP DATABASE IF EXISTS 数据库"     # 删库跑路
-# sql = "DROP TABLE number"    # 删除表
-sql = "create table number(id int primary key, number varchar(20), type varchar(30), name varchar(20))" # 创建编号表
+# sql = "DROP TABLE number_test"    # 删除表
+sql = "create table number_test(id varchar(20), number varchar(20), type varchar(30), name varchar(20))" # 创建编号表
+# sql = "create table atk_ip(ip varchar(20))"    # 创建ip表
 # 执行sql语句
 cursor.execute(sql)
 # 关闭数据库连接

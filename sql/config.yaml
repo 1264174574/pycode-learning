@@ -1,0 +1,6 @@
+all_config:
+ host: 112.124.17.220
+ port: 3306
+ user: root
+ password: lXX15703821212~
+ database: chng_project

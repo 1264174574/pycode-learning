@@ -19,7 +19,7 @@ sql='''
     insert into number(id,number,type,name) values(%s,%s,%s,%s)
 '''
 #把数据以列表形式批量插入
-add_data_list=[('1715','安全处置通知-220524-1715',"[漏洞攻击]远程命令/代码执行攻击","li")]
+add_data_list=[('1893','安全排查通知-220606-1893',"Confluence远程代码执行漏洞","li")]
 
 try:
     #执行sql语句

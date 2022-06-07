@@ -1,4 +1,5 @@
 from distutils.log import debug
+from matplotlib.pyplot import table
 import pymysql
 import yaml
 import sys
@@ -6,7 +7,8 @@ import argparse
 import openpyxl
 import pandas
 from loguru import logger
-import time
+
+table = "number_test"
 
 def banner():
     print(r"""
@@ -54,8 +56,8 @@ def out_con(sql):
     conn = pymysql.connect(host=load_config()[0], port=load_config()[1], user=load_config()[2], password=load_config()[3], charset='utf8', database=load_config()[4])
     # 使用 cursor() 方法创建一个游标对象 cursor
     cursor = conn.cursor()
-    if sql =="":
-        sql='select * from number'
+    if sql == "":
+        sql='select * from {}'.format(table)
     logger.info(sql)
     try:
         #执行sql
@@ -78,8 +80,8 @@ def out_con(sql):
 # 导出至excel表
 def out_excel(sql):
     conn = pymysql.connect(host=load_config()[0], port=load_config()[1], user=load_config()[2], password=load_config()[3], charset='utf8', database=load_config()[4])
-    if sql =="":
-        sql='select * from number'
+    if sql == "":
+        sql='select * from {}'.format(table)
     logger.info(sql)
     try:
         with conn.cursor() as cursor:#创建游标，在这里conn.cursor()==cursor
@@ -118,10 +120,10 @@ def input_excel(filename):
         with conn.cursor() as cursor:
             #cursor.executemany表示批量插入数据，批处理
             cursor.executemany(
-                'insert into number'
+                'insert into {}'
                 '(id,number,type,name)'
                 'values'
-                '(%s,%s,%s,%s)',
+                '(%s,%s,%s,%s)'.format(table),
             excel_data
             )
         conn.commit()
@@ -134,7 +136,7 @@ def input_excel(filename):
 
 def del_tab(id):
     conn = pymysql.connect(host=load_config()[0], port=load_config()[1], user=load_config()[2], password=load_config()[3], charset='utf8', database=load_config()[4])
-    sql='delete from number where id = {}'.format(id)
+    sql='delete from {} where id = {}'.format(table, id)
     cursor=conn.cursor()
     logger.info(sql)
     try:
@@ -154,7 +156,7 @@ def out_ten():
     conn = pymysql.connect(host=load_config()[0], port=load_config()[1], user=load_config()[2], password=load_config()[3], charset='utf8', database=load_config()[4])
     # 使用 cursor() 方法创建一个游标对象 cursor
     cursor = conn.cursor()
-    sql = "select * from number order by id desc limit 10"
+    sql = "select * from {} order by id desc limit 10".format(table)
     logger.info(sql)
     try:
         #执行sql
@@ -180,21 +182,31 @@ if __name__ == '__main__':
     args = parse_args()
     if args.s :
         sql = args.s
+        print(sql)
+        print(args.p)
         if args.p:
             out_con(sql)
+            sys.exit()
         elif args.o:
             out_excel(sql)
+            sys.exit()
+        else:
+            print("请使用“-p”或”-o“选择输出方式")
+            sys.exit()
     elif args.d:
         del_tab(args.d)
+        sys.exit()
     elif args.p:
         sql = ""
         out_con(sql)
+        sys.exit()
     elif args.o:
         sql = ""
         out_excel(sql)
+        sys.exit()
     elif args.i:
         input_excel(args.i)
+        sys.exit()
     elif args.tail:
         out_ten()
-    else:
-        print("输入的参数有误，请使用-h参数查看帮助信息！")
+        sys.exit()
